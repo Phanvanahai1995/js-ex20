@@ -223,7 +223,6 @@ root.addEventListener("click", function (e) {
   if (e.target.classList.contains("btn-repair")) {
     todo.insertAdjacentHTML("beforebegin", ModalItem);
     const id = e.target.dataset.id;
-    const key = e.target.dataset.key;
 
     const modalItem = root.querySelector(".modal-item");
 
@@ -233,13 +232,7 @@ root.addEventListener("click", function (e) {
     btnSave?.addEventListener("click", function (e) {
       const title = { id: id, title: input.value };
 
-      sendRequestPatchData(
-        key,
-        title,
-        "https://todo-3dd5f-default-rtdb.firebaseio.com/todos",
-        todoItemInner,
-        SERVER_API
-      );
+      sendRequestPatchData(id, title, todoItemInner, SERVER_API);
       modalItem.remove();
     });
   }
@@ -264,7 +257,6 @@ todoItemInnerSelected.addEventListener("click", function (e) {
   if (e.target.classList.contains("btn-repair")) {
     todo.insertAdjacentHTML("beforebegin", ModalItem);
     const id = e.target.dataset.id;
-    const key = e.target.dataset.key;
 
     const modalItem = root.querySelector(".modal-item");
 
@@ -275,7 +267,7 @@ todoItemInnerSelected.addEventListener("click", function (e) {
       const title = { id: id, title: input.value };
 
       sendRequestPatchData(
-        key,
+        id,
         title,
         todoItemInnerSelected,
         SEVER_API_SELECTED,
