@@ -19,14 +19,14 @@ let isActiveBtn = false;
 
 const query = {};
 
-const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-const allTextNodes = [];
-let currentNode = treeWalker.nextNode();
+// const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+// const allTextNodes = [];
+// let currentNode = treeWalker.nextNode();
 
-while (currentNode) {
-  allTextNodes.push(currentNode);
-  currentNode = treeWalker.nextNode();
-}
+// while (currentNode) {
+//   allTextNodes.push(currentNode);
+//   currentNode = treeWalker.nextNode();
+// }
 
 const debounce = (func, timeout = 300) => {
   let timer;
@@ -59,58 +59,62 @@ const handleSearch = debounce((e) => {
 searchEl.addEventListener("input", (e) => {
   handleSearch(e);
 
-  CSS.highlights.clear();
+  // CSS.highlights.clear();
 
-  const str = e.target.value.trim().toLowerCase();
-  if (!str) {
-    return;
-  }
+  // const str = e.target.value.trim().toLowerCase();
+  // if (!str) {
+  //   return;
+  // }
 
-  const ranges = allTextNodes
-    .map((el) => {
-      return { el, text: el.textContent.toLowerCase() };
-    })
-    .map(({ text, el }) => {
-      const indices = [];
-      let startPos = 0;
-      while (startPos < text.length) {
-        const index = text.indexOf(str, startPos);
-        if (index === -1) break;
-        indices.push(index);
-        startPos = index + str.length;
-      }
+  // const ranges = allTextNodes
+  //   .map((el) => {
+  //     return { el, text: el.textContent.toLowerCase() };
+  //   })
+  //   .map(({ text, el }) => {
+  //     const indices = [];
+  //     let startPos = 0;
+  //     while (startPos < text.length) {
+  //       const index = text.indexOf(str, startPos);
+  //       if (index === -1) break;
+  //       indices.push(index);
+  //       startPos = index + str.length;
+  //     }
 
-      return indices.map((index) => {
-        const range = new Range();
-        range.setStart(el, index);
-        range.setEnd(el, index + str.length);
-        return range;
-      });
-    });
+  //     return indices.map((index) => {
+  //       const range = new Range();
+  //       range.setStart(el, index);
+  //       range.setEnd(el, index + str.length);
+  //       return range;
+  //     });
+  //   });
 
-  const searchResultsHighlight = new Highlight(...ranges.flat());
+  // const searchResultsHighlight = new Highlight(...ranges.flat());
 
-  CSS.highlights.set("search-results", searchResultsHighlight);
+  // CSS.highlights.set("search-results", searchResultsHighlight);
 });
 
 async function renderBtnCompleted() {
-  const res = await fetch(SEVER_API_SELECTED);
+  try {
+    const res = await fetch(SEVER_API_SELECTED);
 
-  if (!res.ok) throw new Error("Something went wrong");
+    if (!res.ok) throw new Error("Something went wrong");
 
-  const data = await res.json();
+    const data = await res.json();
 
-  const BtnHtml = `
-    <button type="button" class="${
-      isActiveBtn ? `bg-emerald-700` : `bg-gray-400`
-    } hover:bg-gray-500 focus:ring-gray-100 mt-2.5 flex items-center gap-2 rounded-lg px-4 py-2.5 transition-all focus:outline-none focus:ring-4 btn-complete">
-      <span class="font-medium text-white span-element">Completed Todos ${
-        Object.keys(data).length
-      }</span>${isActiveBtn ? arrowDown : arrowRight}
-    </button>
-`;
+    const BtnHtml = `
+      <button type="button" class="${
+        isActiveBtn ? `bg-emerald-700` : `bg-gray-400`
+      } hover:bg-gray-500 focus:ring-gray-100 mt-2.5 flex items-center gap-2 rounded-lg px-4 py-2.5 transition-all focus:outline-none focus:ring-4 btn-complete">
+        <span class="font-medium text-white span-element">Completed Todos ${
+          Object.keys(data).length
+        }</span>${isActiveBtn ? arrowDown : arrowRight}
+      </button>
+  `;
 
-  btnInnerComplete.innerHTML = BtnHtml;
+    btnInnerComplete.innerHTML = BtnHtml;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 btnInnerComplete.addEventListener("click", function (e) {
@@ -264,7 +268,7 @@ todoItemInnerSelected.addEventListener("click", function (e) {
     const btnSave = modalItem?.querySelector(".save-btn_item");
 
     btnSave?.addEventListener("click", function (e) {
-      const title = { id: id, title: input.value };
+      const title = { title: input.value };
 
       sendRequestPatchData(
         id,
@@ -288,43 +292,55 @@ todoItemInnerSelected.addEventListener("click", function (e) {
 });
 
 async function sendRequestData(title, api, element, active) {
-  const newData = { title: title };
-  const res = await fetch(api, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newData),
-  });
+  try {
+    const newData = { title: title };
+    const res = await fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newData),
+    });
 
-  if (!res.ok) throw new Error("Send data found!");
+    if (!res.ok) throw new Error("Send data found!");
 
-  getTodoItem(api, element, active);
-  renderBtnCompleted();
+    getTodoItem(api, element, active);
+    renderBtnCompleted();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function sendRequestDeleteData(id, element, API, active) {
-  const res = await fetch(`${API}/${id}`, {
-    method: "DELETE",
-  });
+  try {
+    const res = await fetch(`${API}/${id}`, {
+      method: "DELETE",
+    });
 
-  if (!res.ok) throw new Error("Send data found!");
+    if (!res.ok) throw new Error("Delete data not found!");
 
-  getTodoItem(API, element, active);
-  renderBtnCompleted();
+    getTodoItem(API, element, active);
+    renderBtnCompleted();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function sendRequestPatchData(id, title, element, API, active) {
-  const res = await fetch(`${API}/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(title),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const res = await fetch(`${API}/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(title),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (!res.ok) throw new Error("Send data found!");
+    if (!res.ok) throw new Error("Send data not found!");
 
-  getTodoItem(API, element, active);
-  renderBtnCompleted();
+    getTodoItem(API, element, active);
+    renderBtnCompleted();
+  } catch (err) {
+    console.error(err);
+  }
 }
