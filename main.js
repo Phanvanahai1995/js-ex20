@@ -150,7 +150,10 @@ async function getTodoItem(api, element, active) {
         (
           item
         ) => `<div class="mt-2.5 flex w-full items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow">
-    <span class="font-normal text-gray-700">${item.title}</span>
+    <span class="font-normal text-gray-700">${(item.title =
+      item.title.startsWith("<") && item.title.endsWith(">")
+        ? item.title.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        : item.title)}</span>
     <div class="flex gap-2">
       <button
         type="button"
