@@ -175,9 +175,9 @@ async function getTodoItem(api, element, active) {
           active ? `bg-emerald-700` : `bg-gray-400`
         } flex h-10 w-10 items-center justify-center rounded-lg hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-300"
       >
-      <i  data-id=${item.id} data-title=${
-          item.title
-        } class="btn-success fa-regular fa-square-check flex items-center justify-center"></i>
+      <i  data-id=${
+        item.id
+      }  class="btn-success fa-regular fa-square-check flex items-center justify-center"></i>
        
       </button>
     </div>

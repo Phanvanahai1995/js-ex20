@@ -13,7 +13,7 @@ const todo = root.querySelector(".todo");
 const searchEl = root.querySelector("input[type='search']");
 const todoItemInner = root.querySelector(".todo_item-inner");
 const todoItemInnerSelected = root.querySelector(".todo_item-success");
-const btnInnerComplete = root.querySelector(".btn-complete");
+const btnInnerComplete = root.querySelector(".btn-inner_complete");
 const btn = root.querySelector(".btn");
 let isActiveBtn = false;
 
@@ -182,7 +182,7 @@ root.addEventListener("click", function (e) {
   }
 
   if (e.target.classList.contains("btn-success")) {
-    const title = e.target.dataset.title;
+    const title = e.target.parentElement.parentElement.parentElement.innerText;
     const key = e.target.dataset.key;
 
     sendRequestData(title, SEVER_API_SELECTED, todoItemInnerSelected, true);
@@ -234,7 +234,7 @@ todoItemInnerSelected.addEventListener("click", function (e) {
   }
 
   if (e.target.classList.contains("btn-success")) {
-    const title = e.target.dataset.title;
+    const title = e.target.parentElement.parentElement.parentElement.innerText;
     const key = e.target.dataset.key;
 
     sendRequestData(title, SERVER_API, todoItemInner);
