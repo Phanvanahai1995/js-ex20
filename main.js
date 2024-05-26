@@ -224,7 +224,8 @@ root.addEventListener("click", function (e) {
 
   if (e.target.classList.contains("btn-delete")) {
     const id = e.target.dataset.id;
-    sendRequestDeleteData(id, todoItemInner, SERVER_API);
+    if (window.confirm("Are you sure??"))
+      sendRequestDeleteData(id, todoItemInner, SERVER_API);
   }
 
   if (e.target.classList.contains("btn-repair")) {
@@ -273,7 +274,8 @@ todoItemInnerSelected.addEventListener("click", function (e) {
   e.stopPropagation();
   if (e.target.classList.contains("btn-delete")) {
     const id = e.target.dataset.id;
-    sendRequestDeleteData(id, todoItemInnerSelected, SEVER_API_SELECTED);
+    if (window.confirm("Are you sure??"))
+      sendRequestDeleteData(id, todoItemInnerSelected, SEVER_API_SELECTED);
   }
 
   if (e.target.classList.contains("btn-repair")) {
