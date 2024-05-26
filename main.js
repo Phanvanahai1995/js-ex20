@@ -106,7 +106,7 @@ async function renderBtnCompleted() {
         isActiveBtn ? `bg-emerald-700` : `bg-gray-400`
       } hover:bg-gray-500 focus:ring-gray-100 mt-2.5 flex items-center gap-2 rounded-lg px-4 py-2.5 transition-all focus:outline-none focus:ring-4 btn-complete">
         <span class="font-medium text-white span-element">Completed Todos ${
-          Object.keys(data).length
+          data.length
         }</span>${isActiveBtn ? arrowDown : arrowRight}
       </button>
   `;
@@ -144,6 +144,11 @@ async function getTodoItem(api, element, active) {
     if (!res.ok) return;
 
     const data = await res.json();
+
+    if (data.length === 0) {
+      element.innerHTML = "";
+      return;
+    }
 
     let html = data
       .map(
