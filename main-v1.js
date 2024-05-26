@@ -46,14 +46,14 @@ async function renderBtnCompleted() {
   const data = await res.json();
 
   const BtnHtml = `
-    <button type="button" class="${
-      isActiveBtn ? `bg-emerald-700` : `bg-gray-400`
-    } hover:bg-gray-500 focus:ring-gray-100 mt-2.5 flex items-center gap-2 rounded-lg px-4 py-2.5 transition-all focus:outline-none focus:ring-4 btn-complete">
-      <span class="font-medium text-white">Completed Todos ${
-        Object.keys(data).length
-      }</span>${isActiveBtn ? arrowDown : arrowRight}
-    </button>
-`;
+      <button type="button" class="${
+        isActiveBtn ? `bg-emerald-700` : `bg-gray-400`
+      } hover:bg-gray-500 focus:ring-gray-100 mt-2.5 flex items-center gap-2 rounded-lg px-4 py-2.5 transition-all focus:outline-none focus:ring-4 btn-complete">
+        <span class="font-medium text-white span-element">Completed Todos ${
+          Object.keys(data).length
+        }</span>${isActiveBtn ? arrowDown : arrowRight}
+      </button>
+  `;
 
   btnInnerComplete.innerHTML = BtnHtml;
 }
@@ -61,12 +61,19 @@ async function renderBtnCompleted() {
 renderBtnCompleted();
 
 btnInnerComplete.addEventListener("click", function (e) {
-  isActiveBtn = !isActiveBtn;
-  renderBtnCompleted();
+  e.stopPropagation();
 
-  isActiveBtn
-    ? todoItemInnerSelected.classList.remove("hide")
-    : todoItemInnerSelected.classList.add("hide");
+  if (
+    e.target.classList.contains("btn-complete") ||
+    e.target.classList.contains("span-element")
+  ) {
+    isActiveBtn = !isActiveBtn;
+    renderBtnCompleted();
+
+    isActiveBtn
+      ? todoItemInnerSelected.classList.remove("hide")
+      : todoItemInnerSelected.classList.add("hide");
+  }
 });
 
 async function getTodoItem(api, element, active) {
@@ -159,7 +166,7 @@ root.addEventListener("click", function (e) {
 
   if (e.target.classList.contains("btn-repair")) {
     todo.insertAdjacentHTML("beforebegin", ModalItem);
-    const id = e.target.dataset.id;
+    const id = +e.target.dataset.id;
     const key = e.target.dataset.key;
 
     const modalItem = root.querySelector(".modal-item");
@@ -210,7 +217,7 @@ todoItemInnerSelected.addEventListener("click", function (e) {
 
   if (e.target.classList.contains("btn-repair")) {
     todo.insertAdjacentHTML("beforebegin", ModalItem);
-    const id = e.target.dataset.id;
+    const id = +e.target.dataset.id;
     const key = e.target.dataset.key;
 
     const modalItem = root.querySelector(".modal-item");

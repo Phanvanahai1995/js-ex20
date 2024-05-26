@@ -141,7 +141,7 @@ async function getTodoItem(api, element, active) {
 
     const res = await fetch(api + queryString);
 
-    if (!res.ok) return;
+    if (!res.ok) throw new Error("Something went wrong");
 
     const data = await res.json();
 
@@ -305,7 +305,7 @@ async function sendRequestData(title, api, element, active) {
       body: JSON.stringify(newData),
     });
 
-    if (!res.ok) return;
+    if (!res.ok) throw new Error("Send data found!");
 
     getTodoItem(api, element, active);
     renderBtnCompleted();
@@ -320,7 +320,7 @@ async function sendRequestDeleteData(id, element, API, active) {
       method: "DELETE",
     });
 
-    if (!res.ok) return;
+    if (!res.ok) throw new Error("Delete data not found!");
 
     getTodoItem(API, element, active);
     renderBtnCompleted();
@@ -339,7 +339,7 @@ async function sendRequestPatchData(id, title, element, API, active) {
       },
     });
 
-    if (!res.ok) return;
+    if (!res.ok) throw new Error("Send data not found!");
 
     getTodoItem(API, element, active);
     renderBtnCompleted();
