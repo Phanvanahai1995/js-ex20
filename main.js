@@ -235,12 +235,17 @@ root.addEventListener("click", function (e) {
     const id = +e.target.dataset.id;
     const key = e.target.dataset.key;
 
-    const modalItem = root.querySelector(".modal");
+    const modalItem = root.querySelector(".modal-item");
 
     const input = modalItem?.querySelector("input[type='text']");
     input.value = value;
 
     const btnSave = modalItem?.querySelector(".save-btn_item");
+    const btnCancel = modalItem?.querySelector(".cancel-btn_item");
+
+    btnCancel?.addEventListener("click", () => {
+      modalItem.remove();
+    });
 
     btnSave?.addEventListener("click", function (e) {
       if (!input.value.trim()) {
@@ -278,14 +283,18 @@ todoItemInnerSelected.addEventListener("click", function (e) {
 
     todo.insertAdjacentHTML("beforebegin", ModalItem);
     const id = +e.target.dataset.id;
-    const key = e.target.dataset.key;
 
-    const modalItem = root.querySelector(".modal");
+    const modalItem = root.querySelector(".modal-item");
 
     const input = modalItem?.querySelector("input[type='text']");
     input.value = value;
 
     const btnSave = modalItem?.querySelector(".save-btn_item");
+    const btnCancel = modalItem?.querySelector(".cancel-btn_item");
+
+    btnCancel?.addEventListener("click", () => {
+      modalItem.remove();
+    });
 
     btnSave?.addEventListener("click", function (e) {
       if (!input.value.trim()) {
